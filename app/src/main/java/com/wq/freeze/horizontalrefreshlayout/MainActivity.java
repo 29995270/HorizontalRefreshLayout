@@ -18,15 +18,18 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    private HorizontalRefreshLayout refreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ViewPager vp = (ViewPager) findViewById(R.id.vp);
-        HorizontalRefreshLayout refreshLayout = (HorizontalRefreshLayout) findViewById(R.id.refresh);
+        refreshLayout = (HorizontalRefreshLayout) findViewById(R.id.refresh);
 
         refreshLayout.setEnable(true);
-
+        refreshLayout.setLeftHeadView(R.layout.widget_refresh_header);
+        refreshLayout.setRightHeadView(R.layout.widget_refresh_header);
 
         Adapter adapter = new Adapter(this);
         vp.setAdapter(adapter);
