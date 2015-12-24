@@ -48,6 +48,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
 
     private RefreshHeader leftRefreshHeader;
     private RefreshHeader rightRefreshHeader;
+    private RefreshCallBack refreshCallback;
 
 
     public HorizontalRefreshLayout(Context context) {
@@ -119,7 +120,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if (!canChildScrollRight() && startX != 0 && startX - ev.getX() > 0) {
+                if (!canChildScrollRight() && startX != 0 && startX - ev.getX() > 0 && refreshState != REFRESH_STATE_REFRESHING) {
                     //end drag
                     dragState = END;
                     refreshState = REFRESH_STATE_START;
@@ -127,7 +128,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
                     if (rightRefreshHeader != null) rightRefreshHeader.onStart(END, rightHead);
                     return true;
                 }
-                if (!canChildScrollLeft() && startX != 0 && startX - ev.getX() < 0) {
+                if (!canChildScrollLeft() && startX != 0 && startX - ev.getX() < 0  && refreshState != REFRESH_STATE_REFRESHING) {
                     //start drag
                     dragState = START;
                     refreshState = REFRESH_STATE_START;
@@ -200,10 +201,9 @@ public class HorizontalRefreshLayout extends FrameLayout {
                     if (leftRefreshHeader != null) {
                         refreshState = REFRESH_STATE_DRAGGING;
                         leftRefreshHeader.onDragging(child1.getTranslationX(), leftHead);
-                        if (child1.getTranslationX() / leftHeadWidth > 0.8f) {
+                        if (child1.getTranslationX() >= (leftHeadWidth - dp2px(context, 16)) && refreshState != REFRESH_STATE_READYTORELEASE) {
                             refreshState = REFRESH_STATE_READYTORELEASE;
                             leftRefreshHeader.onReadyToRelease(leftHead);
-                            Log.v("AAA", "START ready to release");
                         }
                     }
                 }
@@ -236,10 +236,9 @@ public class HorizontalRefreshLayout extends FrameLayout {
                     if (rightRefreshHeader != null) {
                         refreshState = REFRESH_STATE_DRAGGING;
                         rightRefreshHeader.onDragging( - child1.getTranslationX(), rightHead);
-                        if ((-child1.getTranslationX()) / rightHeadWidth > 0.8f) {
+                        if ((-child1.getTranslationX()) >= (rightHeadWidth - dp2px(context, 16)) && refreshState != REFRESH_STATE_READYTORELEASE) {
                             refreshState = REFRESH_STATE_READYTORELEASE;
                             rightRefreshHeader.onReadyToRelease(rightHead);
-                            Log.v("AAA", "END ready to release");
                         }
                     }
                 }
@@ -264,7 +263,20 @@ public class HorizontalRefreshLayout extends FrameLayout {
     }
 
     private void smoothLocateToRefresh() {
+        refreshState = REFRESH_STATE_REFRESHING;
+        dragState = -1;
+        refreshStartX = 0;
         float translationX = child1.getTranslationX();
+
+        if (leftRefreshHeader != null && translationX > 0) {
+            leftRefreshHeader.onRefreshing(leftHead);
+            if (refreshCallback != null) refreshCallback.onLeftRefreshing();
+        }
+        if (rightRefreshHeader != null && translationX < 0) {
+            rightRefreshHeader.onRefreshing(rightHead);
+            if (refreshCallback != null) refreshCallback.onRightRefreshing();
+        }
+
         ValueAnimator animator = ValueAnimator.ofFloat(translationX, translationX > 0 ? leftHeadWidth - dp2px(context, 16) : -(rightHeadWidth - dp2px(context, 16)));
         animator.setDuration(150)
                 .addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -317,6 +329,8 @@ public class HorizontalRefreshLayout extends FrameLayout {
     public void onRefreshComplete(){
         refreshState = REFRESH_STATE_IDLE;
         smoothRelease();
+        if (leftRefreshHeader != null) leftRefreshHeader.onStart(START, leftHead); //reset view style
+        if (rightRefreshHeader != null) rightRefreshHeader.onStart(END, rightHead); //reset view style
     }
 
     public void setLeftHeadView(@LayoutRes int id) {
@@ -342,11 +356,15 @@ public class HorizontalRefreshLayout extends FrameLayout {
     public void setRefreshHeader(RefreshHeader header, int startOrEnd) {
         if (startOrEnd == START) {
             leftRefreshHeader = header;
-            setLeftHeadView(leftRefreshHeader.getView());
+            setLeftHeadView(leftRefreshHeader.getView(this));
         } else if (startOrEnd == END) {
             rightRefreshHeader = header;
-            setRightHeadView(rightRefreshHeader.getView());
+            setRightHeadView(rightRefreshHeader.getView(this));
         }
+    }
+
+    public void setRefreshCallback(RefreshCallBack callback) {
+        refreshCallback = callback;
     }
 
     public int dp2px(Context context, float dpVal) {

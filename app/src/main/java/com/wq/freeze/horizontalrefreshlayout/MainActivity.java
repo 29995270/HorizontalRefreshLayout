@@ -13,12 +13,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
+import com.wq.freeze.horizontalrefreshlayout.lib.RefreshCallBack;
+import com.wq.freeze.horizontalrefreshlayout.lib.SimpleRefreshHeader;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RefreshCallBack {
 
     private HorizontalRefreshLayout refreshLayout;
+    private Adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,26 +31,70 @@ public class MainActivity extends AppCompatActivity {
         refreshLayout = (HorizontalRefreshLayout) findViewById(R.id.refresh);
 
         refreshLayout.setEnable(true);
-        refreshLayout.setLeftHeadView(R.layout.widget_refresh_header);
-        refreshLayout.setRightHeadView(R.layout.widget_refresh_header);
+//        refreshLayout.setLeftHeadView(R.layout.widget_refresh_header);   a simple view to show as refresh view
+//        refreshLayout.setRightHeadView(R.layout.widget_refresh_header);
 
-        Adapter adapter = new Adapter(this);
+
+        refreshLayout.setRefreshHeader(new SimpleRefreshHeader(this), HorizontalRefreshLayout.START);
+        refreshLayout.setRefreshHeader(new SimpleRefreshHeader(this), HorizontalRefreshLayout.END);
+
+        refreshLayout.setRefreshCallback(this);
+
+        adapter = new Adapter(this, 5);
         vp.setAdapter(adapter);
+    }
+
+    @Override
+    public void onLeftRefreshing() {
+        refreshLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adapter.onRefresh();
+                refreshLayout.onRefreshComplete();
+            }
+        }, 1000);
+    }
+
+    @Override
+    public void onRightRefreshing() {
+        refreshLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adapter.onLoadMore();
+                refreshLayout.onRefreshComplete();
+            }
+        }, 1000);
     }
 
     static class Adapter extends PagerAdapter{
 
+        private int count;
         private Random random;
         private Context context;
 
-        public Adapter(Context context){
+        public Adapter(Context context, int count){
             this.context = context;
+            this.count = count;
             this.random = new Random();
+        }
+
+        public void onRefresh() {
+            notifyDataSetChanged();
+        }
+
+        public void onLoadMore() {
+            count += 5;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
         }
 
         @Override
         public int getCount() {
-            return 5;
+            return count;
         }
 
         @Override

@@ -6,9 +6,11 @@
     android:gravity="center">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/text"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="释放以刷新"
+        android:gravity="center"
         android:textColor="@android:color/black"/>
 
 </LinearLayout>
