@@ -1,17 +1,15 @@
 package com.wq.freeze.horizontalrefreshlayout;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
 import com.wq.freeze.horizontalrefreshlayout.lib.RefreshCallBack;
@@ -19,16 +17,19 @@ import com.wq.freeze.horizontalrefreshlayout.lib.SimpleRefreshHeader;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity implements RefreshCallBack {
+/**
+ * Created by wangqi on 2015/12/24.
+ */
+public class RecyclerViewActivity extends AppCompatActivity implements RefreshCallBack {
 
-    private HorizontalRefreshLayout refreshLayout;
     private Adapter adapter;
+    private HorizontalRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ViewPager vp = (ViewPager) findViewById(R.id.vp);
+        setContentView(R.layout.activity_recycler);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         refreshLayout = (HorizontalRefreshLayout) findViewById(R.id.refresh);
 
         refreshLayout.setEnable(true);
@@ -41,16 +42,9 @@ public class MainActivity extends AppCompatActivity implements RefreshCallBack {
 
         refreshLayout.setRefreshCallback(this);
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         adapter = new Adapter(this, 5);
-        vp.setAdapter(adapter);
-    }
-
-    public void gotoRecycler(View v) {
-        startActivity(new Intent(this, RecyclerViewActivity.class));
-    }
-
-    public void gotoScrollView(View v) {
-        startActivity(new Intent(this, ScrollViewActivity.class));
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -75,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements RefreshCallBack {
         }, 1000);
     }
 
-    static class Adapter extends PagerAdapter{
+    static class Adapter extends RecyclerView.Adapter<Holder>{
 
         private int count;
         private Random random;
@@ -88,52 +82,43 @@ public class MainActivity extends AppCompatActivity implements RefreshCallBack {
         }
 
         public void onRefresh() {
-            notifyDataSetChanged();
+            notifyItemRangeChanged(0, count);
         }
 
         public void onLoadMore() {
             count += 5;
-            notifyDataSetChanged();
+            notifyItemRangeInserted(count - 5, 5);
         }
 
         @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
-        }
+        public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+            TextView view = new TextView(parent.getContext());
+            view.setLayoutParams(new ViewGroup.LayoutParams(150, ViewGroup.LayoutParams.MATCH_PARENT));
 
-        @Override
-        public int getCount() {
-            return count;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            TextView view = new TextView(context);
-            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            int rgb = Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
-            view.setBackgroundColor(rgb);
             view.setGravity(Gravity.CENTER);
-            view.setText("position  " + position);
+//
             view.setTextSize(20);
             view.setTextColor(Color.WHITE);
-            container.addView(view);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
-                }
-            });
-            return view;
+            return new Holder(view);
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
+        public void onBindViewHolder(Holder holder, int position) {
+            int rgb = Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
+            ((TextView) holder.itemView).setBackgroundColor(rgb);
+            ((TextView) holder.itemView).setText(position + "");
+        }
+
+        @Override
+        public int getItemCount() {
+            return count;
+        }
+    }
+
+    static class Holder extends RecyclerView.ViewHolder{
+
+        public Holder(View itemView) {
+            super(itemView);
         }
     }
 }

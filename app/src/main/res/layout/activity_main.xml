@@ -16,4 +16,19 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"/>
     </com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout>
+    <Button
+        android:onClick="gotoRecycler"
+        android:text="goto Recycler"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"/>
+
+    <Button
+        android:onClick="gotoScrollView"
+        android:text="goto ScrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"/>
 </RelativeLayout>
