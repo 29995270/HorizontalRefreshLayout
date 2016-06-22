@@ -120,7 +120,8 @@ public class HorizontalRefreshLayout extends FrameLayout {
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if (!canChildScrollRight() && startX != 0 && startX - ev.getX() > 0 && refreshState != REFRESH_STATE_REFRESHING) {
+                if (!canChildScrollRight() && startX != 0 && startX - ev.getX() > 0
+                        && refreshState != REFRESH_STATE_REFRESHING && rightRefreshHeader != null) {
                     //end drag
                     dragState = END;
                     refreshState = REFRESH_STATE_START;
@@ -128,7 +129,8 @@ public class HorizontalRefreshLayout extends FrameLayout {
                     if (rightRefreshHeader != null) rightRefreshHeader.onStart(END, rightHead);
                     return true;
                 }
-                if (!canChildScrollLeft() && startX != 0 && startX - ev.getX() < 0  && refreshState != REFRESH_STATE_REFRESHING) {
+                if (!canChildScrollLeft() && startX != 0 && startX - ev.getX() < 0
+                        && refreshState != REFRESH_STATE_REFRESHING && leftRefreshHeader != null) {
                     //start drag
                     dragState = START;
                     refreshState = REFRESH_STATE_START;
