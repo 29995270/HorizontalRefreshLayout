@@ -17,34 +17,40 @@
                 android:orientation="horizontal"
                 android:layout_height="match_parent">
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="match_parent"
+                    android:gravity="center"
                     android:background="@android:color/holo_blue_light"
                     android:text="old data 1"/>
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:background="@android:color/holo_blue_light"
+                    android:gravity="center"
                     android:text="old data 2"/>
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:background="@android:color/holo_blue_light"
+                    android:gravity="center"
                     android:text="old data 3"/>
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:background="@android:color/holo_blue_light"
+                    android:gravity="center"
                     android:text="old data 4"/>
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:background="@android:color/holo_blue_light"
+                    android:gravity="center"
                     android:text="old data 5"/>
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:background="@android:color/holo_blue_light"
+                    android:gravity="center"
                     android:text="old data 6"/>
             </LinearLayout>
         </HorizontalScrollView>

@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
 import com.wq.freeze.horizontalrefreshlayout.lib.RefreshCallBack;
-import com.wq.freeze.horizontalrefreshlayout.lib.SimpleRefreshHeader;
 
 import java.util.Random;
 

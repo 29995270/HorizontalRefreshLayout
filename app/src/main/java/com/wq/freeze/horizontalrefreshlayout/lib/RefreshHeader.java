@@ -1,5 +1,6 @@
 package com.wq.freeze.horizontalrefreshlayout.lib;
 
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,11 +17,11 @@ public interface RefreshHeader{
     /**
      * @param distance
      */
-    void onDragging(float distance, View refreshHead);
+    void onDragging(float distance, float percent, View refreshHead);
 
     void onReadyToRelease(View refreshHead);
 
-    View getView(ViewGroup container);
+    @NonNull View getView(ViewGroup container);
 
     void onRefreshing(View refreshHead);
 }

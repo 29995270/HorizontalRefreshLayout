@@ -1,15 +1,18 @@
-package com.wq.freeze.horizontalrefreshlayout.lib;
+package com.wq.freeze.horizontalrefreshlayout;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wq.freeze.horizontalrefreshlayout.R;
+import com.wq.freeze.horizontalrefreshlayout.lib.RefreshHeader;
 
 /**
  * Created by wangqi on 2015/12/24.
+ * a simple header for test
  */
 public class SimpleRefreshHeader implements RefreshHeader {
 
@@ -20,6 +23,7 @@ public class SimpleRefreshHeader implements RefreshHeader {
         this.context = context;
     }
 
+    @NonNull
     @Override
     public View getView(ViewGroup container) {
         View view = LayoutInflater.from(context).inflate(R.layout.widget_refresh_header, container, false);
@@ -33,8 +37,9 @@ public class SimpleRefreshHeader implements RefreshHeader {
     }
 
     @Override
-    public void onDragging(float distance, View refreshHead) {
-        textView.setText("dragging " + distance);
+    public void onDragging(float distance, float percent, View refreshHead) {
+        String percentS = String.valueOf(percent);
+        textView.setText("dragging\n" + "distance:" + ((int) distance) +"\n"+ "percent:\n" + percentS.substring(0, percentS.length() > 6? 5: percentS.length()));
     }
 
     @Override

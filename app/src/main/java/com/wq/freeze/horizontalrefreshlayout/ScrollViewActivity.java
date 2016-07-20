@@ -3,13 +3,12 @@ package com.wq.freeze.horizontalrefreshlayout;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ViewGroup;
+import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
 import com.wq.freeze.horizontalrefreshlayout.lib.RefreshCallBack;
-import com.wq.freeze.horizontalrefreshlayout.lib.SimpleRefreshHeader;
 
 /**
  * Created by wangqi on 2015/12/24.
@@ -44,7 +43,8 @@ public class ScrollViewActivity extends AppCompatActivity implements RefreshCall
             public void run() {
                 refreshLayout.onRefreshComplete();
                 TextView textView = new TextView(ScrollViewActivity.this);
-                textView.setLayoutParams(new LinearLayout.LayoutParams(120, LinearLayout.LayoutParams.MATCH_PARENT));
+                textView.setLayoutParams(new LinearLayout.LayoutParams(200, LinearLayout.LayoutParams.MATCH_PARENT));
+                textView.setGravity(Gravity.CENTER);
                 textView.setText("new refresh data");
                 textView.setTextColor(Color.BLACK);
                 textView.setBackgroundColor(Color.GREEN);
@@ -60,8 +60,9 @@ public class ScrollViewActivity extends AppCompatActivity implements RefreshCall
             public void run() {
                 refreshLayout.onRefreshComplete();
                 TextView textView = new TextView(ScrollViewActivity.this);
-                textView.setLayoutParams(new LinearLayout.LayoutParams(120, LinearLayout.LayoutParams.MATCH_PARENT));
+                textView.setLayoutParams(new LinearLayout.LayoutParams(200, LinearLayout.LayoutParams.MATCH_PARENT));
                 textView.setText("new load more data");
+                textView.setGravity(Gravity.CENTER);
                 textView.setTextColor(Color.BLACK);
                 textView.setBackgroundColor(Color.GREEN);
                 linearLayout.addView(textView);
