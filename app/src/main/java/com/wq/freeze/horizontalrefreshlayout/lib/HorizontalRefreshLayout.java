@@ -184,7 +184,6 @@ public class HorizontalRefreshLayout extends FrameLayout {
         switch (event.getAction()){
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-//                mTarget.setTranslationX(0);
 
                 final float targetTranslationX = mTargetTranslationX;
 
@@ -215,7 +214,6 @@ public class HorizontalRefreshLayout extends FrameLayout {
                 float dX = event.getX() - refreshStartX;
                 refreshStartX = event.getX();
                 if (targetTranslationX < 0) {
-//                    mTarget.setTranslationX(0);
                     setTargetTranslationX(0);
                     event.setAction(MotionEvent.ACTION_CANCEL);
                     dragState = -1;
@@ -227,20 +225,9 @@ public class HorizontalRefreshLayout extends FrameLayout {
 
                 if (targetTranslationX + dampingDX < 0) {
                     setTargetTranslationX(0);
-//                    mTarget.setTranslationX(0);
                 } else if (targetTranslationX + dampingDX > leftHeadWidth){
-//                    if (refreshMode == MODE_ABOVE) {
-//                        mTarget.setTranslationX(0);
-//                    } else {
-//                        mTarget.setTranslationX(leftHeadWidth);
-//                    }
                     setTargetTranslationX(leftHeadWidth);
                 } else {
-//                    if (refreshMode == MODE_ABOVE) {
-//                        mTarget.setTranslationX(0);
-//                    } else {
-//                        mTarget.setTranslationX(targetTranslationX + dampingDX);
-//                    }
                     setTargetTranslationX(targetTranslationX + dampingDX);
 //                    Log.v("AAA", mTargetTranslationX + "");
                     if (leftRefreshHeader != null) {
@@ -269,7 +256,6 @@ public class HorizontalRefreshLayout extends FrameLayout {
                 refreshStartX = event.getX();
                 if (targetTranslationX > 0) {
                     setTargetTranslationX(0);
-//                    mTarget.setTranslationX(0);
                     event.setAction(MotionEvent.ACTION_CANCEL);
                     dragState = -1;
                     refreshStartX = 0;
@@ -280,20 +266,9 @@ public class HorizontalRefreshLayout extends FrameLayout {
 
                 if (targetTranslationX + dampingDX > 0) {
                     setTargetTranslationX(0);
-//                    mTarget.setTranslationX(0);
                 } else if (targetTranslationX + dampingDX < -rightHeadWidth){
-//                    if (refreshMode == MODE_ABOVE) {
-//                        mTarget.setTranslationX(0);
-//                    } else {
-//                        mTarget.setTranslationX(-rightHeadWidth);
-//                    }
                     setTargetTranslationX(-rightHeadWidth);
                 } else {
-//                    if (refreshMode == MODE_ABOVE) {
-//                        mTarget.setTranslationX(0);
-//                    } else {
-//                        mTarget.setTranslationX(targetTranslationX + dampingDX);
-//                    }
                     setTargetTranslationX(targetTranslationX + dampingDX);
 
 //                    Log.v("AAA", mTargetTranslationX + "");

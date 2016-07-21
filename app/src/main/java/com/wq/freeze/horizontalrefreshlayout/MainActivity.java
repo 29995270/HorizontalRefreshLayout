@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
 import com.wq.freeze.horizontalrefreshlayout.lib.RefreshCallBack;
+import com.wq.freeze.horizontalrefreshlayout.refreshhead.MaterialRefreshHeader;
+import com.wq.freeze.horizontalrefreshlayout.refreshhead.SimpleRefreshHeader;
 
 import java.util.Random;
 
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements RefreshCallBack {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle("ViewPager");
         ViewPager vp = (ViewPager) findViewById(R.id.vp);
         refreshLayout = (HorizontalRefreshLayout) findViewById(R.id.refresh);
 
@@ -34,9 +37,9 @@ public class MainActivity extends AppCompatActivity implements RefreshCallBack {
 //        refreshLayout.setLeftHeadView(R.layout.widget_refresh_header);   a simple view to show as refresh view
 //        refreshLayout.setRightHeadView(R.layout.widget_refresh_header);
 
-
-        refreshLayout.setRefreshHeader(new SimpleRefreshHeader(this), HorizontalRefreshLayout.START);
-        refreshLayout.setRefreshHeader(new SimpleRefreshHeader(this), HorizontalRefreshLayout.END);
+        refreshLayout.setRefreshMode(HorizontalRefreshLayout.MODE_ABOVE);
+        refreshLayout.setRefreshHeader(new MaterialRefreshHeader(HorizontalRefreshLayout.START), HorizontalRefreshLayout.START);
+        refreshLayout.setRefreshHeader(new MaterialRefreshHeader(HorizontalRefreshLayout.END), HorizontalRefreshLayout.END);
 
         refreshLayout.setRefreshCallback(this);
 

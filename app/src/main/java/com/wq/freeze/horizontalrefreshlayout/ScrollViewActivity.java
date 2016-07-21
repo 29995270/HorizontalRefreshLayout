@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
 import com.wq.freeze.horizontalrefreshlayout.lib.RefreshCallBack;
+import com.wq.freeze.horizontalrefreshlayout.refreshhead.SimpleRefreshHeader;
 
 /**
  * Created by wangqi on 2015/12/24.
@@ -22,6 +23,7 @@ public class ScrollViewActivity extends AppCompatActivity implements RefreshCall
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrollview);
+        setTitle("ScrollView");
         refreshLayout = (HorizontalRefreshLayout) findViewById(R.id.refresh);
         linearLayout = (LinearLayout) findViewById(R.id.container);
 

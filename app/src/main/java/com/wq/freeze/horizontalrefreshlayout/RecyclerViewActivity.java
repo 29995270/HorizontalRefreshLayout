@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
 import com.wq.freeze.horizontalrefreshlayout.lib.RefreshCallBack;
+import com.wq.freeze.horizontalrefreshlayout.refreshhead.SimpleRefreshHeader;
 
 import java.util.Random;
 
@@ -28,6 +29,7 @@ public class RecyclerViewActivity extends AppCompatActivity implements RefreshCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler);
+        setTitle("RecyclerView");
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         refreshLayout = (HorizontalRefreshLayout) findViewById(R.id.refresh);
 
@@ -35,7 +37,7 @@ public class RecyclerViewActivity extends AppCompatActivity implements RefreshCa
 //        refreshLayout.setLeftHeadView(R.layout.widget_refresh_header);   a simple view to show as refresh view
 //        refreshLayout.setRightHeadView(R.layout.widget_refresh_header);
 
-
+        refreshLayout.setRefreshMode(HorizontalRefreshLayout.MODE_UNDER_FOLLOW_DRAG);
         refreshLayout.setRefreshHeader(new SimpleRefreshHeader(this), HorizontalRefreshLayout.START);
         refreshLayout.setRefreshHeader(new SimpleRefreshHeader(this), HorizontalRefreshLayout.END);
 
