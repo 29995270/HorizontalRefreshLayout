@@ -1,11 +1,7 @@
-# HorizontalRefreshLayout
-====
+### HorizontalRefreshLayout
 a android layout widget for horizontal drag refresh action (viewpager or recyclerview or horizontal Scrollview)
 -----
 ![](https://github.com/29995270/HorizontalRefreshLayout/blob/master/art.gif "viewpager")
-<br>
-![](https://github.com/29995270/HorizontalRefreshLayout/blob/master/art2.gif "recyclerview")
-
 <br>
 how to use
 -----
@@ -23,16 +19,18 @@ how to use
 ```
 
 ```java
-      refreshLayout.setEnable(true);
-//      refreshLayout.setLeftHeadView(R.layout.widget_refresh_header);   a simple view to show as refresh view
-//      refreshLayout.setRightHeadView(R.layout.widget_refresh_header);
+    refreshLayout.setRefreshMode(HorizontalRefreshLayout.MODE_ABOVE);
+    //MODE_ABOVE: RefreshHeader above of refreshable view
+    //MODE_UNDER: RefreshHeader under the refreshable view
+    //MODE_UNDER_FOLLOW_DRAG: RefreshHeader under the refreshable view and follow drag action
 
+    //define your RefreshHeader
+    refreshLayout.setRefreshHeader(new MaterialRefreshHeader(HorizontalRefreshLayout.START),
+                    HorizontalRefreshLayout.START);
+    refreshLayout.setRefreshHeader(new MaterialRefreshHeader(HorizontalRefreshLayout.END),
+            HorizontalRefreshLayout.END);
 
-      refreshLayout.setRefreshHeader(new SimpleRefreshHeader(this), HorizontalRefreshLayout.START);
-      refreshLayout.setRefreshHeader(new SimpleRefreshHeader(this), HorizontalRefreshLayout.END);
-
-      refreshLayout.setRefreshCallback(this);
-        
+    refreshLayout.setRefreshCallback(this);
         
     @Override
     public void onLeftRefreshing() {
