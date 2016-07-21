@@ -1,13 +1,13 @@
 package com.wq.freeze.horizontalrefreshlayout.lib;
 
-import android.animation.ValueAnimator;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.MainThread;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,6 +43,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
     private Context context;
     private View leftHead;
     private View rightHead;
+    private float mTargetTranslationX = 0;
 
     private RefreshHeader leftRefreshHeader;
     private RefreshHeader rightRefreshHeader;
@@ -50,7 +51,12 @@ public class HorizontalRefreshLayout extends FrameLayout {
     private int commonMarginPx;
 
     private int commonMargin = 16;
-    private boolean refreshHeadFollowDrag = true;
+
+    public static final int MODE_UNDER_FOLLOW_DRAG = 0;
+    public static final int MODE_UNDER = 1;
+    public static final int MODE_ABOVE = 2;
+
+    private int refreshMode = MODE_UNDER;
 
     public HorizontalRefreshLayout(Context context) {
         super(context);
@@ -99,6 +105,16 @@ public class HorizontalRefreshLayout extends FrameLayout {
         if (mTarget == null) {
             return;
         }
+
+        if (refreshState == REFRESH_STATE_IDLE && refreshMode != MODE_UNDER) {
+            if (leftHead != null) {
+                leftHead.setTranslationX(-leftHeadWidth);
+            }
+            if (rightHead != null) {
+                rightHead.setTranslationX(rightHeadWidth);
+            }
+        }
+
         super.onLayout(changed, l, t, r, b);
     }
 
@@ -170,7 +186,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
             case MotionEvent.ACTION_CANCEL:
 //                mTarget.setTranslationX(0);
 
-                final float targetTranslationX = mTarget.getTranslationX();
+                final float targetTranslationX = mTargetTranslationX;
 
                 if (dragState == START) {
                     if (targetTranslationX < (leftHeadWidth - commonMarginPx)) {
@@ -188,7 +204,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
                 return false;
         }
 
-        final float targetTranslationX = mTarget.getTranslationX();
+        final float targetTranslationX = mTargetTranslationX;
 
         if (dragState == START) {
 
@@ -199,7 +215,8 @@ public class HorizontalRefreshLayout extends FrameLayout {
                 float dX = event.getX() - refreshStartX;
                 refreshStartX = event.getX();
                 if (targetTranslationX < 0) {
-                    mTarget.setTranslationX(0);
+//                    mTarget.setTranslationX(0);
+                    setTargetTranslationX(0);
                     event.setAction(MotionEvent.ACTION_CANCEL);
                     dragState = -1;
                     refreshStartX = 0;
@@ -209,20 +226,33 @@ public class HorizontalRefreshLayout extends FrameLayout {
                 float dampingDX = dX * (1 - Math.abs((targetTranslationX / leftHeadWidth)));  //let drag action has resistance
 
                 if (targetTranslationX + dampingDX < 0) {
-                    mTarget.setTranslationX(0);
+                    setTargetTranslationX(0);
+//                    mTarget.setTranslationX(0);
                 } else if (targetTranslationX + dampingDX > leftHeadWidth){
-                    mTarget.setTranslationX(leftHeadWidth);
+//                    if (refreshMode == MODE_ABOVE) {
+//                        mTarget.setTranslationX(0);
+//                    } else {
+//                        mTarget.setTranslationX(leftHeadWidth);
+//                    }
+                    setTargetTranslationX(leftHeadWidth);
                 } else {
-                    mTarget.setTranslationX(targetTranslationX + dampingDX);
-//                    Log.v("AAA", mTarget.getTranslationX() + "");
+//                    if (refreshMode == MODE_ABOVE) {
+//                        mTarget.setTranslationX(0);
+//                    } else {
+//                        mTarget.setTranslationX(targetTranslationX + dampingDX);
+//                    }
+                    setTargetTranslationX(targetTranslationX + dampingDX);
+//                    Log.v("AAA", mTargetTranslationX + "");
                     if (leftRefreshHeader != null) {
-                        if (refreshHeadFollowDrag) {
+                        if (refreshMode == MODE_UNDER_FOLLOW_DRAG || refreshMode == MODE_ABOVE) {
                             leftHead.setTranslationX(targetTranslationX + dampingDX - (leftHeadWidth - commonMarginPx));
                         }
-
-                        refreshState = REFRESH_STATE_DRAGGING;
-                        leftRefreshHeader.onDragging(mTarget.getTranslationX(), Math.abs(mTarget.getTranslationX()/(leftHeadWidth - commonMarginPx)), leftHead);
-                        if (mTarget.getTranslationX() > (leftHeadWidth - commonMarginPx) && refreshState != REFRESH_STATE_READY_TO_RELEASE) {
+                        float percent = Math.abs(mTargetTranslationX / (leftHeadWidth - commonMarginPx));
+                        if (percent > 0.1f) {
+                            refreshState = REFRESH_STATE_DRAGGING;
+                            leftRefreshHeader.onDragging(mTargetTranslationX, percent, leftHead);
+                        }
+                        if (mTargetTranslationX > (leftHeadWidth - commonMarginPx) && refreshState != REFRESH_STATE_READY_TO_RELEASE) {
                             refreshState = REFRESH_STATE_READY_TO_RELEASE;
                             leftRefreshHeader.onReadyToRelease(leftHead);
                         }
@@ -238,7 +268,8 @@ public class HorizontalRefreshLayout extends FrameLayout {
                 float dX = event.getX() - refreshStartX;
                 refreshStartX = event.getX();
                 if (targetTranslationX > 0) {
-                    mTarget.setTranslationX(0);
+                    setTargetTranslationX(0);
+//                    mTarget.setTranslationX(0);
                     event.setAction(MotionEvent.ACTION_CANCEL);
                     dragState = -1;
                     refreshStartX = 0;
@@ -248,21 +279,34 @@ public class HorizontalRefreshLayout extends FrameLayout {
                 float dampingDX = dX * (1 - Math.abs((targetTranslationX / rightHeadWidth)));  //let drag action has resistance
 
                 if (targetTranslationX + dampingDX > 0) {
-                    mTarget.setTranslationX(0);
+                    setTargetTranslationX(0);
+//                    mTarget.setTranslationX(0);
                 } else if (targetTranslationX + dampingDX < -rightHeadWidth){
-                    mTarget.setTranslationX(-rightHeadWidth);
+//                    if (refreshMode == MODE_ABOVE) {
+//                        mTarget.setTranslationX(0);
+//                    } else {
+//                        mTarget.setTranslationX(-rightHeadWidth);
+//                    }
+                    setTargetTranslationX(-rightHeadWidth);
                 } else {
-                    mTarget.setTranslationX(targetTranslationX + dampingDX);
+//                    if (refreshMode == MODE_ABOVE) {
+//                        mTarget.setTranslationX(0);
+//                    } else {
+//                        mTarget.setTranslationX(targetTranslationX + dampingDX);
+//                    }
+                    setTargetTranslationX(targetTranslationX + dampingDX);
 
-//                    Log.v("AAA", mTarget.getTranslationX() + "");
+//                    Log.v("AAA", mTargetTranslationX + "");
                     if (rightRefreshHeader != null) {
-                        if (refreshHeadFollowDrag) {
+                        if (refreshMode == MODE_UNDER_FOLLOW_DRAG || refreshMode == MODE_ABOVE) {
                             rightHead.setTranslationX(targetTranslationX + dampingDX + (rightHeadWidth - commonMarginPx));
                         }
-
-                        refreshState = REFRESH_STATE_DRAGGING;
-                        rightRefreshHeader.onDragging(-mTarget.getTranslationX(), Math.abs(mTarget.getTranslationX()/(rightHeadWidth - commonMarginPx)), rightHead);
-                        if ((-mTarget.getTranslationX()) > (rightHeadWidth - commonMarginPx) && refreshState != REFRESH_STATE_READY_TO_RELEASE) {
+                        float percent = Math.abs(mTargetTranslationX / (rightHeadWidth - commonMarginPx));
+                        if (percent > 0.1f) {
+                            refreshState = REFRESH_STATE_DRAGGING;
+                            rightRefreshHeader.onDragging(-mTargetTranslationX, percent, rightHead);
+                        }
+                        if ((-mTargetTranslationX) > (rightHeadWidth - commonMarginPx) && refreshState != REFRESH_STATE_READY_TO_RELEASE) {
                             refreshState = REFRESH_STATE_READY_TO_RELEASE;
                             rightRefreshHeader.onReadyToRelease(rightHead);
                         }
@@ -273,16 +317,38 @@ public class HorizontalRefreshLayout extends FrameLayout {
         }
         return super.onTouchEvent(event);
     }
+    
+    private void setTargetTranslationX(float translation) {
+        mTargetTranslationX = translation;
+        if (refreshMode != MODE_ABOVE) {
+            mTarget.setTranslationX(mTargetTranslationX);
+        }
+    }
 
     private void smoothRelease(){
+        refreshState = REFRESH_STATE_START;
         dragState = -1;
         refreshStartX = 0;
-        mTarget.animate().translationX(0).setDuration(200).start();
+
+        if (refreshMode == MODE_ABOVE) {
+            setTargetTranslationX(0);
+        } else {
+            mTarget.animate().translationX(0).setDuration(200)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            setTargetTranslationX(mTarget.getTranslationX());
+                        }
+                    })
+                    .start();
+        }
         if (leftRefreshHeader != null) {
-            if (refreshHeadFollowDrag) leftHead.animate().translationX(-leftHeadWidth).setDuration(200).start();
+            leftRefreshHeader.onStart(START, leftHead);
+            if (refreshMode == MODE_UNDER_FOLLOW_DRAG || refreshMode == MODE_ABOVE) leftHead.animate().translationX(-leftHeadWidth).setDuration(200).start();
         }
         if (rightRefreshHeader != null) {
-            if (refreshHeadFollowDrag) rightHead.animate().translationX(rightHeadWidth).setDuration(200).start();
+            rightRefreshHeader.onStart(START, rightHead);
+            if (refreshMode == MODE_UNDER_FOLLOW_DRAG || refreshMode == MODE_ABOVE) rightHead.animate().translationX(rightHeadWidth).setDuration(200).start();
         }
     }
 
@@ -290,21 +356,33 @@ public class HorizontalRefreshLayout extends FrameLayout {
         refreshState = REFRESH_STATE_REFRESHING;
         dragState = -1;
         refreshStartX = 0;
-        float translationX = mTarget.getTranslationX();
+        float translationX = mTargetTranslationX;
 
         if (leftRefreshHeader != null && translationX > 0) {
             leftRefreshHeader.onRefreshing(leftHead);
-            if (refreshHeadFollowDrag) leftHead.animate().translationX(0).setDuration(150).start();
+            if (refreshMode == MODE_UNDER_FOLLOW_DRAG || refreshMode == MODE_ABOVE) leftHead.animate().translationX(0).setDuration(150).start();
             if (refreshCallback != null) refreshCallback.onLeftRefreshing();
         }
         if (rightRefreshHeader != null && translationX < 0) {
             rightRefreshHeader.onRefreshing(rightHead);
-            if (refreshHeadFollowDrag) rightHead.animate().translationX(0).setDuration(150).start();
+            if (refreshMode == MODE_UNDER_FOLLOW_DRAG || refreshMode == MODE_ABOVE) rightHead.animate().translationX(0).setDuration(150).start();
             if (refreshCallback != null) refreshCallback.onRightRefreshing();
         }
 
-        float dX = (translationX > 0 ? leftHeadWidth - commonMarginPx : -(rightHeadWidth - commonMarginPx)) - translationX;
-        mTarget.animate().translationXBy(dX).setDuration(150).start();
+        if (refreshMode == MODE_ABOVE) {
+            setTargetTranslationX(0);
+        } else {
+            float dX = (translationX > 0 ? leftHeadWidth - commonMarginPx : -(rightHeadWidth - commonMarginPx)) - translationX;
+            mTarget.animate().translationXBy(dX).setDuration(150)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            setTargetTranslationX(mTarget.getTranslationX());
+                        }
+                    })
+                    .start();
+        }
+
     }
 
     @MainThread
@@ -318,7 +396,11 @@ public class HorizontalRefreshLayout extends FrameLayout {
         }
 
         if (view.getParent() == null) {
-            addView(view, 0);
+            if (refreshMode == MODE_ABOVE) {
+                addView(view);
+            } else {
+                addView(view, 0);
+            }
         }
     }
 
@@ -352,8 +434,8 @@ public class HorizontalRefreshLayout extends FrameLayout {
         this.commonMargin = commonMargin;
     }
 
-    public void setRefreshHeadFollowDrag(boolean refreshHeadFollowDrag) {
-        this.refreshHeadFollowDrag = refreshHeadFollowDrag;
+    public void setRefreshMode(int refreshMode) {
+        this.refreshMode = refreshMode;
     }
 
     public void onRefreshComplete(){

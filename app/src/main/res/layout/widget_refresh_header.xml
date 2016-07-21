@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
+        android:text="start Refresh"
         android:textColor="@android:color/black"/>
 
 </FrameLayout>
