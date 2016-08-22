@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements RefreshCallBack {
 
         adapter = new Adapter(this, 5);
         vp.setAdapter(adapter);
+
+        refreshLayout.startAutoRefresh(true);
     }
 
     public void gotoRecycler(View v) {

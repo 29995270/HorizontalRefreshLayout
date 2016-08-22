@@ -67,6 +67,10 @@ public class MaterialRefreshHeader implements RefreshHeader {
 
     @Override
     public void onRefreshing(View refreshHead) {
+        mProgress.showArrow(true);
+        mProgress.setAlpha(255);
+        mProgress.setProgressRotation(1);
+        mProgress.setStartEndTrim(0f, Math.min(.8f, 1));
         mProgress.start();
     }
 }

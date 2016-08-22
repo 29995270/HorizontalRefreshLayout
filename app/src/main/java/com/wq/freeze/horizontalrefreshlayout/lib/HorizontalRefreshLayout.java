@@ -191,13 +191,13 @@ public class HorizontalRefreshLayout extends FrameLayout {
                     if (targetTranslationX < (leftHeadWidth - commonMarginPx)) {
                         smoothRelease();
                     } else {
-                        smoothLocateToRefresh();
+                        smoothLocateToRefresh(true);
                     }
                 } else if (dragState == END) {
                     if ((-targetTranslationX) < (rightHeadWidth - commonMarginPx)) {
                         smoothRelease();
                     } else {
-                        smoothLocateToRefresh();
+                        smoothLocateToRefresh(true);
                     }
                 }
                 return false;
@@ -327,7 +327,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
         }
     }
 
-    private void smoothLocateToRefresh() {
+    private void smoothLocateToRefresh(boolean manualOrAuto) {
         refreshState = REFRESH_STATE_REFRESHING;
         dragState = -1;
         refreshStartX = 0;
@@ -348,7 +348,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
             setTargetTranslationX(0);
         } else {
             float dX = (translationX > 0 ? leftHeadWidth - commonMarginPx : -(rightHeadWidth - commonMarginPx)) - translationX;
-            mTarget.animate().translationXBy(dX).setDuration(150)
+            mTarget.animate().translationXBy(dX).setDuration(manualOrAuto? 150: 500)
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
@@ -411,6 +411,25 @@ public class HorizontalRefreshLayout extends FrameLayout {
 
     public void setRefreshMode(int refreshMode) {
         this.refreshMode = refreshMode;
+    }
+
+    /**
+     * auto refresh without finger drag
+     * @param startOrEnd true refresh left or false refresh right
+     */
+    public void startAutoRefresh(final boolean startOrEnd) {
+        // delay to let the animation smoothly
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (startOrEnd) {
+                    setTargetTranslationX(1);
+                } else {
+                    setTargetTranslationX(-1);
+                }
+                smoothLocateToRefresh(false);
+            }
+        }, 100);
     }
 
     public void onRefreshComplete(){
