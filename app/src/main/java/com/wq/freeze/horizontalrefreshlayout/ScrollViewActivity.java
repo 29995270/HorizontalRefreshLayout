@@ -28,9 +28,6 @@ public class ScrollViewActivity extends AppCompatActivity implements RefreshCall
         linearLayout = (LinearLayout) findViewById(R.id.container);
 
         refreshLayout.setEnable(true);
-//        refreshLayout.setLeftHeadView(R.layout.widget_refresh_header);   a simple view to show as refresh view
-//        refreshLayout.setRightHeadView(R.layout.widget_refresh_header);
-
 
         refreshLayout.setRefreshHeader(new SimpleRefreshHeader(this), HorizontalRefreshLayout.START);
         refreshLayout.setRefreshHeader(new SimpleRefreshHeader(this), HorizontalRefreshLayout.END);

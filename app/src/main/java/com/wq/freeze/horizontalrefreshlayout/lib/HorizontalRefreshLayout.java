@@ -439,22 +439,12 @@ public class HorizontalRefreshLayout extends FrameLayout {
         if (rightRefreshHeader != null) rightRefreshHeader.onStart(END, rightHead); //reset view style
     }
 
-    public void setLeftHeadView(@LayoutRes int id) {
-        leftHead = LayoutInflater.from(context).inflate(id, this, false);
-        setRefreshView(leftHead, START);
-    }
-
-    public void setLeftHeadView(View view) {
+    private void setLeftHeadView(View view) {
         leftHead = view;
         setRefreshView(leftHead, START);
     }
 
-    public void setRightHeadView(@LayoutRes int id) {
-        rightHead = LayoutInflater.from(context).inflate(id, this, false);
-        setRefreshView(rightHead, END);
-    }
-
-    public void setRightHeadView(View view) {
+    private void setRightHeadView(View view) {
         rightHead = view;
         setRefreshView(rightHead, END);
     }

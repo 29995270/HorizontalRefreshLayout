@@ -34,8 +34,6 @@ public class RecyclerViewActivity extends AppCompatActivity implements RefreshCa
         refreshLayout = (HorizontalRefreshLayout) findViewById(R.id.refresh);
 
         refreshLayout.setEnable(true);
-//        refreshLayout.setLeftHeadView(R.layout.widget_refresh_header);   a simple view to show as refresh view
-//        refreshLayout.setRightHeadView(R.layout.widget_refresh_header);
 
         refreshLayout.setRefreshMode(HorizontalRefreshLayout.MODE_UNDER_FOLLOW_DRAG);
         refreshLayout.setRefreshHeader(new SimpleRefreshHeader(this), HorizontalRefreshLayout.START);

@@ -34,8 +34,6 @@ public class MainActivity extends AppCompatActivity implements RefreshCallBack {
         refreshLayout = (HorizontalRefreshLayout) findViewById(R.id.refresh);
 
         refreshLayout.setEnable(true);
-//        refreshLayout.setLeftHeadView(R.layout.widget_refresh_header);   a simple view to show as refresh view
-//        refreshLayout.setRightHeadView(R.layout.widget_refresh_header);
 
         refreshLayout.setRefreshMode(HorizontalRefreshLayout.MODE_ABOVE);
         refreshLayout.setRefreshHeader(new MaterialRefreshHeader(HorizontalRefreshLayout.START),
