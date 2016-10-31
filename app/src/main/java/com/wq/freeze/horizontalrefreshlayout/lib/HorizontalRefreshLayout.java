@@ -332,27 +332,36 @@ public class HorizontalRefreshLayout extends FrameLayout {
         dragState = -1;
         refreshStartX = 0;
         float translationX = mTargetTranslationX;
-
+      
+        int refreshHead = -1;
         if (leftRefreshHeader != null && translationX > 0) {
             leftRefreshHeader.onRefreshing(leftHead);
             if (refreshMode == MODE_UNDER_FOLLOW_DRAG || refreshMode == MODE_ABOVE) leftHead.animate().translationX(0).setDuration(150).start();
-            if (refreshCallback != null) refreshCallback.onLeftRefreshing();
+            refreshHead = START;
         }
         if (rightRefreshHeader != null && translationX < 0) {
             rightRefreshHeader.onRefreshing(rightHead);
             if (refreshMode == MODE_UNDER_FOLLOW_DRAG || refreshMode == MODE_ABOVE) rightHead.animate().translationX(0).setDuration(150).start();
-            if (refreshCallback != null) refreshCallback.onRightRefreshing();
+            refreshHead = END;
         }
 
         if (refreshMode == MODE_ABOVE) {
             setTargetTranslationX(0);
         } else {
             float dX = (translationX > 0 ? leftHeadWidth - commonMarginPx : -(rightHeadWidth - commonMarginPx)) - translationX;
+            final int finalRefreshHead = refreshHead;
             mTarget.animate().translationXBy(dX).setDuration(manualOrAuto? 150: 500)
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             setTargetTranslationX(mTarget.getTranslationX());
+                            if (refreshCallback != null) {
+                                if (finalRefreshHead == START) {
+                                    refreshCallback.onLeftRefreshing();
+                                } else {
+                                    refreshCallback.onRightRefreshing();
+                                }
+                            }
                         }
                     })
                     .start();
