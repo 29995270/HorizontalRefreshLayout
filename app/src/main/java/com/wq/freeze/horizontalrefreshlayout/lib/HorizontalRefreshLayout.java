@@ -3,16 +3,15 @@ package com.wq.freeze.horizontalrefreshlayout.lib;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.MainThread;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 
 /**
@@ -57,6 +56,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
     public static final int MODE_ABOVE = 2;
 
     private int refreshMode = MODE_UNDER;
+    private int touchSlop;
 
     public HorizontalRefreshLayout(Context context) {
         super(context);
@@ -76,6 +76,8 @@ public class HorizontalRefreshLayout extends FrameLayout {
     private void init(Context context, AttributeSet attrs) {
         this.context = context;
         commonMarginPx = dp2px(context, commonMargin);
+        ViewConfiguration viewConfiguration = ViewConfiguration.get(context);
+        touchSlop = viewConfiguration.getScaledTouchSlop();
     }
 
     @Override
@@ -147,7 +149,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if (!canChildScrollRight() && startX != 0 && startX - ev.getX() > 0
+                if (!canChildScrollRight() && startX != 0 && startX - ev.getX() > touchSlop
                         && refreshState != REFRESH_STATE_REFRESHING && rightRefreshHeader != null) {
                     //end drag
                     dragState = END;
@@ -347,6 +349,13 @@ public class HorizontalRefreshLayout extends FrameLayout {
 
         if (refreshMode == MODE_ABOVE) {
             setTargetTranslationX(0);
+            if (refreshCallback != null) {
+                if (refreshHead == START) {
+                    refreshCallback.onLeftRefreshing();
+                } else {
+                    refreshCallback.onRightRefreshing();
+                }
+            }
         } else {
             float dX = (translationX > 0 ? leftHeadWidth - commonMarginPx : -(rightHeadWidth - commonMarginPx)) - translationX;
             final int finalRefreshHead = refreshHead;
