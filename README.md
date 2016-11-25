@@ -3,6 +3,29 @@ a android layout widget for horizontal drag refresh action (viewpager or recycle
 -----
 ![](https://github.com/29995270/HorizontalRefreshLayout/blob/master/art.gif "viewpager")
 <br>
+
+dependencies
+_____
+
+Step 1. Add the JitPack repository to your build file
+
+Add it in your root build.gradle at the end of repositories:
+```
+	allprojects {
+		repositories {
+			...
+			maven { url "https://jitpack.io" }
+		}
+	}
+```
+
+Step 2. Add the dependency
+```
+	dependencies {
+	        compile 'com.github.29995270:HorizontalRefreshLayout:1.0.0'
+	}
+```
+
 how to use
 -----
 ```xml
@@ -31,6 +54,8 @@ how to use
             HorizontalRefreshLayout.END);
 
     refreshLayout.setRefreshCallback(this);
+
+    // refreshLayout.startAutoRefresh(true); // if you want to refresh in code
         
     @Override
     public void onLeftRefreshing() {
