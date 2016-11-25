@@ -5,7 +5,7 @@ a android layout widget for horizontal drag refresh action (viewpager or recycle
 <br>
 
 dependencies
-_____
+-----
 
 Step 1. Add the JitPack repository to your build file
 
