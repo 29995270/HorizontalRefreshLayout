@@ -1,4 +1,4 @@
-package com.wq.freeze.horizontalrefreshlayout.lib;
+package com.freeze.horizontalrefreshlayout.lib;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

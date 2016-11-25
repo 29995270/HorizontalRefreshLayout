@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.wq.freeze.horizontalrefreshlayout.MainActivity"
     android:background="#666666">
-    <com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout
+    <com.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
             android:id="@+id/vp"
             android:layout_width="match_parent"
             android:layout_height="300dp"/>
-    </com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout>
+    </com.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout>
     <Button
         android:onClick="gotoRecycler"
         android:text="goto Recycler"

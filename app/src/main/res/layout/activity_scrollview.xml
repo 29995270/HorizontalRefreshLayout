@@ -3,7 +3,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout
+    <com.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="300dp">
@@ -54,5 +54,5 @@
                     android:text="old data 6"/>
             </LinearLayout>
         </HorizontalScrollView>
-    </com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout>
+    </com.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout>
 </LinearLayout>

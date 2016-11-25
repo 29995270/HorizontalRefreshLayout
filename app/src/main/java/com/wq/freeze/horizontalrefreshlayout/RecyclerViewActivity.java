@@ -11,9 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
-import com.wq.freeze.horizontalrefreshlayout.lib.RefreshCallBack;
-import com.wq.freeze.horizontalrefreshlayout.refreshhead.SimpleRefreshHeader;
+import com.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
+import com.freeze.horizontalrefreshlayout.lib.RefreshCallBack;
+import com.freeze.horizontalrefreshlayout.lib.refreshhead.SimpleRefreshHeader;
 
 import java.util.Random;
 

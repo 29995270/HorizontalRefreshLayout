@@ -7,9 +7,9 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
-import com.wq.freeze.horizontalrefreshlayout.lib.RefreshCallBack;
-import com.wq.freeze.horizontalrefreshlayout.refreshhead.SimpleRefreshHeader;
+import com.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
+import com.freeze.horizontalrefreshlayout.lib.RefreshCallBack;
+import com.freeze.horizontalrefreshlayout.lib.refreshhead.SimpleRefreshHeader;
 
 /**
  * Created by wangqi on 2015/12/24.

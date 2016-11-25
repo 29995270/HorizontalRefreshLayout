@@ -3,20 +3,19 @@ package com.wq.freeze.horizontalrefreshlayout;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
-import com.wq.freeze.horizontalrefreshlayout.lib.RefreshCallBack;
-import com.wq.freeze.horizontalrefreshlayout.refreshhead.MaterialRefreshHeader;
-import com.wq.freeze.horizontalrefreshlayout.refreshhead.SimpleRefreshHeader;
+import com.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
+import com.freeze.horizontalrefreshlayout.lib.RefreshCallBack;
+import com.freeze.horizontalrefreshlayout.lib.refreshhead.MaterialRefreshHeader;
 
 import java.util.Random;
 

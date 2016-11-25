@@ -1,4 +1,4 @@
-package com.wq.freeze.horizontalrefreshlayout.refreshhead;
+package com.freeze.horizontalrefreshlayout.lib.refreshhead;
 
 import android.support.annotation.NonNull;
 import android.view.Gravity;
@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.wq.freeze.horizontalrefreshlayout.R;
-import com.wq.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
-import com.wq.freeze.horizontalrefreshlayout.lib.RefreshHeader;
+import com.freeze.horizontalrefreshlayout.lib.HorizontalRefreshLayout;
+import com.freeze.horizontalrefreshlayout.lib.R;
+import com.freeze.horizontalrefreshlayout.lib.RefreshHeader;
 
 /**
  * Created by wangqi on 2016/7/21.

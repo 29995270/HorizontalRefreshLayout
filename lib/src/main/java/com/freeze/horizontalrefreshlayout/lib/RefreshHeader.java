@@ -1,4 +1,4 @@
-package com.wq.freeze.horizontalrefreshlayout.lib;
+package com.freeze.horizontalrefreshlayout.lib;
 
 import android.support.annotation.NonNull;
 import android.view.View;

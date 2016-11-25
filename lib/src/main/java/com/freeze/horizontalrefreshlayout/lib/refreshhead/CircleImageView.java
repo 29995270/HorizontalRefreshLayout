@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wq.freeze.horizontalrefreshlayout.refreshhead;
+package com.freeze.horizontalrefreshlayout.lib.refreshhead;
 
 import android.content.Context;
 import android.graphics.Canvas;
