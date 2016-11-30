@@ -158,7 +158,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
                     rightRefreshHeader.onStart(END, rightHead);
                     return true;
                 }
-                if (!canChildScrollLeft() && startX != 0 && startX - ev.getX() < 0
+                if (!canChildScrollLeft() && startX != 0 && startX - ev.getX() < -touchSlop
                         && refreshState != REFRESH_STATE_REFRESHING && leftRefreshHeader != null) {
                     //start drag
                     dragState = START;
