@@ -22,6 +22,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
 
     private View mTarget;
     private float startX;
+    private float startY;
     private float refreshStartX;
     private int dragState = -1;
     public static final int START = 0;
@@ -146,10 +147,11 @@ public class HorizontalRefreshLayout extends FrameLayout {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 startX = ev.getX();
+                startY = ev.getY();
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if (!canChildScrollRight() && startX != 0 && startX - ev.getX() > touchSlop
+                if (!canChildScrollRight() && startX != 0 && startX - ev.getX() > touchSlop && startY != 0 && Math.abs(startY - ev.getY()) < touchSlop/2
                         && refreshState != REFRESH_STATE_REFRESHING && rightRefreshHeader != null) {
                     //end drag
                     dragState = END;
@@ -158,7 +160,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
                     rightRefreshHeader.onStart(END, rightHead);
                     return true;
                 }
-                if (!canChildScrollLeft() && startX != 0 && startX - ev.getX() < -touchSlop
+                if (!canChildScrollLeft() && startX != 0 && startX - ev.getX() < -touchSlop && startY != 0 && Math.abs(startY - ev.getY()) < touchSlop/2
                         && refreshState != REFRESH_STATE_REFRESHING && leftRefreshHeader != null) {
                     //start drag
                     dragState = START;
@@ -172,6 +174,7 @@ public class HorizontalRefreshLayout extends FrameLayout {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 startX = 0;
+                startY = 0;
                 break;
         }
 
