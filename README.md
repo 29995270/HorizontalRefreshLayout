@@ -6,7 +6,8 @@ a android layout widget for horizontal drag refresh action (viewpager or recycle
 
 dependencies
 -----
-[![](https://jitpack.io/v/29995270/HorizontalRefreshLayout.svg)](https://jitpack.io/#29995270/HorizontalRefreshLayout)
+[![](https://jitpack.io/v/29995270/HorizontalRefreshLayout.svg)](https://jitpack.io/#29995270/HorizontalRefreshLayout)  
+
 Step 1. Add the JitPack repository to your build file
 
 Add it in your root build.gradle at the end of repositories:
